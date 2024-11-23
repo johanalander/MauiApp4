@@ -8,7 +8,7 @@
     Title="MauiApp4">
 
     <ShellContent
-        Title="Home"
+        Title="Xinger"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
