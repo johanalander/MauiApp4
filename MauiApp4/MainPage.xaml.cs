@@ -47,10 +47,15 @@
 
         public void RedrawClock(object source, ElapsedEventArgs e)
         {
+            // Alternative 2)
+            // Would like to change so that this function can start MapDrawable (this namespace) instead of ClockDrawable (namespace: MauiApp4.Drawables)
+            // This is an alternative to 1)
+
             //var clock = (ClockDrawable)this.ClockGraphicsView.Drawable;
             var graphicsView = this.ClockGraphicsView;
 
-            /*   <GraphicsView Drawable="{StaticResource clockDrawable}"
+            /* xaml:
+             * <GraphicsView Drawable="{StaticResource clockDrawable}"
                 HorizontalOptions="Center"
                 x:Name="ClockGraphicsView"
                 HeightRequest="400"
@@ -62,7 +67,8 @@
             //var graphicsView = this.MapGraphicsView;
 
 
-            /*< GraphicsView Drawable = "{StaticResource mapDrawable}"
+            /* xaml:
+             * < GraphicsView Drawable = "{StaticResource mapDrawable}"
         HorizontalOptions = "Center"
         x: Name = "MapGraphicsView"
         HeightRequest = "400"

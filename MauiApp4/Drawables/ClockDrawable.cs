@@ -1,5 +1,10 @@
 namespace MauiApp4.Drawables;
 
+// Alt 1)
+// Would like to access data from Mainpage.cs
+// for example Name, posX, posY
+// This is an alternative to 2)
+
 
 public class ClockDrawable : IDrawable
 {
