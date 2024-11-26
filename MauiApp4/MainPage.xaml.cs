@@ -51,7 +51,16 @@
             // Would like to change so that this function can start MapDrawable (this namespace) instead of ClockDrawable (namespace: MauiApp4.Drawables)
             // This is an alternative to 1)
 
-            //var clock = (ClockDrawable)this.ClockGraphicsView.Drawable;
+            // Om man gör en egen kontroll (Drawable) så ska kontrollen ta hand om allt , inklusive uppdateringar
+            // Lägg en timer som sköter uppdateringen av klockan i kontrollen, sprid inte ut kod som riskerar att dupliceras , tänk på separation of concerns
+            // Vid behov skapa metoder (commands) för att exc starta/stoppa klockan.
+
+
+            var clock = (ClockDrawable)this.ClockGraphicsView.Drawable;
+            
+            // Om man vill komma åt properties i en drawable från codebehind kan man gå direkt på propertyn, ex nedan
+            // clock.Name = "KNAS";
+            
             var graphicsView = this.ClockGraphicsView;
 
             /* xaml:

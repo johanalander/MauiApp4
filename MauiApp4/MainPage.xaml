@@ -5,61 +5,65 @@
              x:Class="MauiApp4.MainPage">
 
 
-    <ContentPage.Resources>
-        <drawables:ClockDrawable x:Key="clockDrawable"/>
-    </ContentPage.Resources>
+  <ContentPage.Resources>
+    <drawables:ClockDrawable x:Key="clockDrawable"/>
+  </ContentPage.Resources>
 
-    <VerticalStackLayout>
+  <VerticalStackLayout>
 
-        <HorizontalStackLayout
+    <HorizontalStackLayout
                 HorizontalOptions="Center"
                 Spacing="10">
 
-            <Button
+      <Button
                 Text="Click to start"
                 x:Name="CounterBtn"
                 Clicked="OnCounterClicked">
-            </Button>
+      </Button>
 
-            <Button
+      <Button
                 Text="Button2">
-            </Button>
+      </Button>
 
-            <Button
+      <Button
                 Text="Button3">
-            </Button>
+      </Button>
 
-            <Entry
+      <Entry
                 x:Name="XingerName"
                 Text=""
                 Placeholder="Enter xinger name"
                 Completed="OnEntryCompleted"
                 MaxLength="20">
-                
-            </Entry>
 
-        </HorizontalStackLayout>
+      </Entry>
 
-        <GraphicsView Drawable="{StaticResource clockDrawable}"
-            HorizontalOptions="Center"
-            x:Name="ClockGraphicsView"
-            HeightRequest="400"
-            WidthRequest="300">
-        </GraphicsView>
+    </HorizontalStackLayout>
 
+    
+    <GraphicsView HorizontalOptions="Center"
+                  x:Name="ClockGraphicsView"
+                  HeightRequest="400"
+                  WidthRequest="300">
+      <GraphicsView.Drawable>
+        <!-- Name binds till värdet av kontrollen XingerName's fält Text -->
+        <drawables:ClockDrawable  Name="{Binding Source={x:Reference XingerName},Path=Text}" />
+      </GraphicsView.Drawable>
 
-        <Label Text=""
+    </GraphicsView>
+
+    <Label Text=""
             x:Name="XingerNameLabel"
             BackgroundColor="Gray"
             HorizontalOptions="Center" />
-        <Label Text=""
+    <Label Text=""
             BackgroundColor="Gray"
             HorizontalOptions="Center" />
-        <Label Text="End"
+    <Label Text="End"
             BackgroundColor="Gray"
             HorizontalOptions="Center" />
 
-    </VerticalStackLayout>
+  </VerticalStackLayout>
 
 
 

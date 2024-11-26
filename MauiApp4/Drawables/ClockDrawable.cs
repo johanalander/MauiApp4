@@ -1,3 +1,6 @@
+using Microsoft.Maui.Graphics.Text;
+using System.Diagnostics;
+
 namespace MauiApp4.Drawables;
 
 // Alt 1)
@@ -6,76 +9,92 @@ namespace MauiApp4.Drawables;
 // This is an alternative to 2)
 
 
-public class ClockDrawable : IDrawable
+public class ClockDrawable : BindableObject, IDrawable
 {
 
-    public void Draw(ICanvas canvas, RectF dirtyRect)
-    {
-        
-        DateTime curTime = DateTime.Now;
-        var clockCenterPoint = new PointF(200, 300);
-        var circleRadius = 100;
+  /* deklarera property */
+  /* alla properties som ska kunna accessas via bindningar i xaml måste vara av typen BindableProperty */
+
+  public static readonly BindableProperty NameProperty = BindableProperty.Create(nameof(Name), typeof(string), typeof(ClockDrawable));
+  
+  /* om propertyn endast ska användas från codebehind (.cs) så kan man gå direkt på propertyn nedan */ 
+  public string Name
+  {
+    get => (string)GetValue(NameProperty);
+    set => SetValue(NameProperty, value);
+  }
+
+  public void Draw(ICanvas canvas, RectF dirtyRect)
+  {
+
+    DateTime curTime = DateTime.Now;
+    var clockCenterPoint = new PointF(200, 300);
+    var circleRadius = 100;
+
+   
+    canvas.StrokeColor = Colors.Aqua;
+    canvas.StrokeSize = 6;
+
+    canvas.DrawCircle(clockCenterPoint, circleRadius);
+    canvas.DrawCircle(clockCenterPoint, 5);
+
+    canvas.StrokeSize = 4;
+    var hourPoint = GetHourHand(curTime, circleRadius, clockCenterPoint);
+    canvas.DrawLine(clockCenterPoint, hourPoint);
 
 
-        canvas.StrokeColor = Colors.Aqua;
-        canvas.StrokeSize = 6;
+    var minutePoint = GetMinuteHand(curTime, circleRadius, clockCenterPoint);
+    canvas.DrawLine(clockCenterPoint, minutePoint);
 
-        canvas.DrawCircle(clockCenterPoint, circleRadius);
-        canvas.DrawCircle(clockCenterPoint, 5);
+    var secondPoint = GetSecondHand(curTime, circleRadius, clockCenterPoint);
+    canvas.DrawLine(clockCenterPoint, secondPoint);
 
-        canvas.StrokeSize = 4;
-        var hourPoint = GetHourHand(curTime, circleRadius, clockCenterPoint);
-        canvas.DrawLine(clockCenterPoint, hourPoint);
+    /* Test , skriv ut property */
+    //Debug.WriteLine(this.Name);
+    canvas.DrawString(this.Name, 20, 20, 380, 100, HorizontalAlignment.Left, VerticalAlignment.Top);
 
+  }
 
-        var minutePoint = GetMinuteHand(curTime, circleRadius, clockCenterPoint);
-        canvas.DrawLine(clockCenterPoint, minutePoint);
+  internal static PointF GetHourHand(DateTime curTime, int radius, PointF center)
+  {
 
-        var secondPoint = GetSecondHand(curTime, circleRadius, clockCenterPoint);
-        canvas.DrawLine(clockCenterPoint, secondPoint);
+    int currentHour = curTime.Hour;
 
-    }
+    if (currentHour > 12)
+      currentHour -= 12;
 
-    internal static PointF GetHourHand(DateTime curTime, int radius, PointF center)
-    {
+    var angleDegrees = (currentHour * 360) / 12;
+    var angle = (Math.PI / 180.0) * angleDegrees;
 
-        int currentHour = curTime.Hour;
+    var hourShorter = radius * .8;
+    PointF outerPoint = new((float)(hourShorter * Math.Sin(angle)) + center.X, (float)(-hourShorter * Math.Cos(angle)) + center.Y);
 
-        if (currentHour > 12)
-            currentHour -= 12;
+    return outerPoint;
+  }
 
-        var angleDegrees = (currentHour * 360) / 12;
-        var angle = (Math.PI / 180.0) * angleDegrees;
+  internal static PointF GetMinuteHand(DateTime curTime, int radius, PointF center)
+  {
 
-        var hourShorter = radius * .8;
-        PointF outerPoint = new((float)(hourShorter * Math.Sin(angle)) + center.X, (float)(-hourShorter * Math.Cos(angle)) + center.Y);
+    int currentMin = curTime.Minute;
 
-        return outerPoint;
-    }
+    var angleDegrees = (currentMin * 360) / 60;
+    var angle = (Math.PI / 180.0) * angleDegrees;
 
-    internal static PointF GetMinuteHand(DateTime curTime, int radius, PointF center)
-    {
+    PointF outerPoint = new((float)(radius * Math.Sin(angle)) + center.X, (float)(-radius * Math.Cos(angle)) + center.Y);
 
-        int currentMin = curTime.Minute;
+    return outerPoint;
+  }
 
-        var angleDegrees = (currentMin * 360) / 60;
-        var angle = (Math.PI / 180.0) * angleDegrees;
+  internal static PointF GetSecondHand(DateTime curTime, int radius, PointF center)
+  {
 
-        PointF outerPoint = new((float)(radius * Math.Sin(angle)) + center.X, (float)(-radius * Math.Cos(angle)) + center.Y);
+    int currentSecond = curTime.Second;
 
-        return outerPoint;
-    }
+    var angleDegrees = (currentSecond * 360) / 60;
+    var angle = (Math.PI / 180.0) * angleDegrees;
 
-    internal static PointF GetSecondHand(DateTime curTime, int radius, PointF center)
-    {
+    PointF outerPoint = new((float)(radius * Math.Sin(angle) + center.X), (float)(-radius * Math.Cos(angle)) + center.Y);
 
-        int currentSecond = curTime.Second;
-
-        var angleDegrees = (currentSecond * 360) / 60;
-        var angle = (Math.PI / 180.0) * angleDegrees;
-
-        PointF outerPoint = new((float)(radius * Math.Sin(angle) + center.X), (float)(-radius * Math.Cos(angle)) + center.Y);
-
-        return outerPoint;
-    }
+    return outerPoint;
+  }
 }
